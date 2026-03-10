@@ -1,4 +1,3 @@
-// DATEIUEBERSICHT: Datenmodell fuer Benutzer, Sessions, CVs, Metadaten und Zusatzdokumente.
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -9,58 +8,20 @@ generator client {
 }
 
 model Cv {
-  token         String   @id
-  userId        String?
-  data          Json
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  token       String   @id
+  userId      String?
+  data        Json
+  contextText String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  user           User?               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  meta           CvMeta?
-  certificates   Certificate[]
-  additionalText AdditionalText[]
-}
-
-model Certificate {
-  id        String   @id @default(cuid())
-  cvToken   String
-  data      Json
-  rawText   String
-  createdAt DateTime @default(now())
-
-  cv Cv @relation(fields: [cvToken], references: [token], onDelete: Cascade)
-}
-
-model AdditionalText {
-  id        String   @id @default(cuid())
-  cvToken   String
-  content   String
-  createdAt DateTime @default(now())
-
-  cv Cv @relation(fields: [cvToken], references: [token], onDelete: Cascade)
-}
-
-model CvMeta {
-  id        String   @id @default(cuid())
-  cvToken   String   @unique
-
-  name      String
-  position  String
-  summary   String
-
-  imageUrl  String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  cv Cv @relation(fields: [cvToken], references: [token], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
   id           String    @id @default(cuid())
   email        String    @unique
   name         String?
-  publicSlug   String?   @unique
   passwordHash String
   createdAt    DateTime  @default(now())
 

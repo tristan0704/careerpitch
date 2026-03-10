@@ -1,0 +1,53 @@
+import { callOpenAiChat } from "@/lib/openai"
+import { enforceRateLimit } from "@/lib/securityRateLimit"
+
+type InterviewBody = {
+    token?: string
+    role?: string
+    company?: string
+    github?: string
+    question?: string
+}
+
+export async function POST(req: Request) {
+    const limited = enforceRateLimit(req, "simulate-interview", {
+        windowMs: 60_000,
+        max: 80,
+    })
+    if (limited) return limited
+
+    const body = (await req.json().catch(() => ({}))) as InterviewBody
+    const role = body.role?.trim() || "Backend Developer"
+    const company = body.company?.trim() || ""
+    const github = body.github?.trim() || ""
+    const question = body.question?.trim()
+
+    if (!question) {
+        return Response.json({ error: "Missing question" }, { status: 400 })
+    }
+
+    const prompt = [
+        "You are an interviewer for junior and early-career candidates.",
+        "Keep the interview realistic, concise, and supportive but direct.",
+        `The target role is: ${role}.`,
+        company ? `The target company is: ${company}.` : "No specific company was provided.",
+        github ? `The candidate shared this GitHub context: ${github}.` : "No GitHub context was provided.",
+        "Reply as an interviewer in 3 to 6 sentences.",
+        "Evaluate the candidate's answer briefly and then ask exactly one strong follow-up question.",
+    ].join("\n")
+
+    const ai = await callOpenAiChat({
+        prompt,
+        question,
+        timeoutMs: 20_000,
+    })
+
+    if (!ai.ok) {
+        return Response.json({ error: "AI request failed" }, { status: 502 })
+    }
+
+    return Response.json({
+        token: body.token ?? null,
+        answer: ai.content,
+    })
+}
