@@ -1,0 +1,91 @@
+import Link from "next/link";
+
+export default function LoginPage() {
+  return (
+    <div className="flex min-h-screen flex-col justify-center px-6 py-12 lg:px-8 bg-gray-900">
+      {/* Header */}
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <img
+          src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+          className="mx-auto h-10 w-auto"
+          alt="Logo"
+        />
+
+        <h2 className="mt-10 text-center text-2xl font-bold tracking-tight text-white">
+          Melde dich in deinem Account an
+        </h2>
+      </div>
+
+      {/* Form */}
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form className="space-y-6">
+          {/* Email */}
+          <div>
+            <label className="block text-sm font-medium text-gray-100">
+              E-Mail-Adresse
+            </label>
+
+            <div className="mt-2">
+              <input
+                type="email"
+                required
+                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-white outline outline-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:outline-indigo-500"
+              />
+            </div>
+          </div>
+
+          {/* Password */}
+          <div>
+            <div className="flex items-center justify-between">
+              <label className="block text-sm font-medium text-gray-100">
+                Passwort
+              </label>
+
+              <div className="text-sm">
+                <a className="font-semibold text-indigo-400 hover:text-indigo-300">
+                  Passwort vergessen?
+                </a>
+              </div>
+            </div>
+
+            <div className="mt-2">
+              <input
+                type="password"
+                required
+                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-white outline outline-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:outline-indigo-500"
+              />
+            </div>
+          </div>
+
+          {/* Button */}
+          <div className="flex flex-row gap-x-6 items-center">
+            {/* BACK BUTTON */}
+            <Link
+              href="/"
+              className="flex w-full justify-center rounded-md border border-white/10 px-3 py-2 text-sm font-semibold text-gray-300 hover:bg-white/5 hover:text-white"
+            >
+              Zurück
+            </Link>
+            <Link
+              href="/protected/home"
+              className="flex w-full items-center justify-center rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-400"
+            >
+              Anmelden
+            </Link>
+          </div>
+        </form>
+
+        {/* Footer */}
+        <p className="mt-10 text-center text-sm text-gray-400">
+          Noch kein Konto?{" "}
+          <Link
+            href="/auth/register"
+            className="font-semibold text-indigo-400 hover:text-indigo-300"
+          >
+            Registrieren
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}
