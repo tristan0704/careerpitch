@@ -268,6 +268,7 @@ export default function InterviewFeedback({
     const faceAnalysisReport = showFaceAnalysis
         ? persistedState?.faceAnalysis ?? null
         : null;
+    const hasFaceAnalysisReport = Boolean(faceAnalysisReport);
     const evaluation = analysis.evaluation ?? persistedState?.feedback ?? null;
 
     return (
@@ -280,7 +281,13 @@ export default function InterviewFeedback({
 
             {evaluation ? (
                 <div className="space-y-6">
-                    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+                    <div
+                        className={`grid items-start gap-6 ${
+                            hasFaceAnalysisReport
+                                ? "lg:grid-cols-[minmax(0,1fr)_340px]"
+                                : "lg:grid-cols-1"
+                        }`}
+                    >
                         {/* Main Column */}
                         <div className="space-y-6">
                             <FeedbackSummaryHero
@@ -318,11 +325,11 @@ export default function InterviewFeedback({
                         </div>
 
                         {/* Sidebar Column */}
-                        <div className="space-y-6">
-                            {showFaceAnalysis ? (
+                        {faceAnalysisReport ? (
+                            <div className="space-y-6">
                                 <FaceAnalysisSection report={faceAnalysisReport} labels={labels} />
-                            ) : null}
-                        </div>
+                            </div>
+                        ) : null}
                     </div>
 
                     <SpeakingAnalyticsSection

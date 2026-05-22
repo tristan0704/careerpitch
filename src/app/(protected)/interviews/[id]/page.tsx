@@ -441,7 +441,7 @@ function InterviewDetailStepContent({
 
     if (interview.interviewFlow === API_MASTERCLASS_FLOW) {
         const apiMasterclassStep = step >= 3 ? 2 : 1;
-        const apiMasterclassSteps = [labels.steps[1], labels.steps[2]];
+        const apiMasterclassSteps = ["Interview", "Feedback"];
         const apiMasterclassNextRequirement =
             step === 2
                 ? hasTranscriptProgress
@@ -455,6 +455,11 @@ function InterviewDetailStepContent({
         const apiMasterclassCanNavigateForward =
             step === 2 &&
             hasTranscriptProgress &&
+            !isPersistingStep &&
+            !navigationLockMessage;
+        const apiMasterclassCanComplete =
+            step >= 3 &&
+            interview.hasInterviewFeedback &&
             !isPersistingStep &&
             !navigationLockMessage;
 
@@ -520,7 +525,20 @@ function InterviewDetailStepContent({
                                     </button>
                                 </div>
                             ) : (
-                                <div className="min-h-10" />
+                                <div className="text-right">
+                                    {(navigationLockMessage || apiMasterclassNextRequirement) && (
+                                        <p className="mb-2 text-xs text-amber-300">
+                                            {navigationLockMessage || apiMasterclassNextRequirement}
+                                        </p>
+                                    )}
+                                    <button
+                                        onClick={() => void persistStep(6)}
+                                        disabled={!apiMasterclassCanComplete}
+                                        className="rounded-md bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-green-400 disabled:cursor-not-allowed disabled:opacity-40"
+                                    >
+                                        Abschließen
+                                    </button>
+                                </div>
                             )}
                         </div>
                     </div>

@@ -1266,6 +1266,7 @@ export async function updateInterviewProgressForUser(args: {
             startedAt: true,
             completedAt: true,
             xpAwardedAt: true,
+            interviewFlow: true,
             hasCvFeedback: true,
             runtimeTranscriptStatus: true,
             hasInterviewFeedback: true,
@@ -1277,12 +1278,16 @@ export async function updateInterviewProgressForUser(args: {
         throw new Error("Interview not found");
     }
 
-    const maxAccessibleStep = resolveMaxAccessibleStep({
-        hasCvFeedback: existing.hasCvFeedback,
-        transcriptStatus: existing.runtimeTranscriptStatus,
-        hasInterviewFeedback: existing.hasInterviewFeedback,
-        hasCodingEvaluation: existing.hasCodingEvaluation,
-    });
+    const maxAccessibleStep =
+        existing.interviewFlow === "apiMasterclass" &&
+        existing.hasInterviewFeedback
+            ? 6
+            : resolveMaxAccessibleStep({
+                  hasCvFeedback: existing.hasCvFeedback,
+                  transcriptStatus: existing.runtimeTranscriptStatus,
+                  hasInterviewFeedback: existing.hasInterviewFeedback,
+                  hasCodingEvaluation: existing.hasCodingEvaluation,
+              });
     const currentStep = Math.max(
         1,
         Math.min(maxAccessibleStep, Math.round(args.currentStep))
