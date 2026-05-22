@@ -12,6 +12,7 @@ import { readApiErrorMessage } from "@/lib/api-error";
 import { useI18n } from "@/lib/i18n/context";
 import type { AppDictionary } from "@/lib/i18n/dictionaries";
 import { InterviewSessionProvider, useOptionalInterviewSession } from "@/lib/interview-session/context";
+import { API_MASTERCLASS_FLOW, getCallDurationSecondsForFlow, type InterviewFlow } from "@/lib/learn-challenges";
 
 type InterviewMode = "voice" | "face";
 
@@ -28,6 +29,7 @@ type InterviewDetail = {
     experience: string;
     companySize: string;
     interviewMode: InterviewMode | null;
+    interviewFlow: InterviewFlow;
     currentStep: number;
     status: string;
     startedAt: string | null;
@@ -94,6 +96,7 @@ type InterviewStatusSnapshot = {
     startedAt: string | null;
     completedAt: string | null;
     interviewMode?: InterviewMode | null;
+    interviewFlow?: InterviewFlow;
     transcriptStatus: "idle" | "recording" | "transcribing" | "ready" | "error" | null;
     transcriptError: string;
     hasCvFeedback: boolean;
@@ -161,6 +164,7 @@ function mergeInterviewStatus(
         startedAt: status.startedAt,
         completedAt: status.completedAt,
         interviewMode: status.interviewMode ?? interview.interviewMode,
+        interviewFlow: status.interviewFlow ?? interview.interviewFlow,
         transcript: status.transcriptStatus
             ? {
                   transcriptStatus: status.transcriptStatus,
@@ -434,6 +438,96 @@ function InterviewDetailStepContent({
             void onRefreshInterview();
         }
     }, [localTranscriptStatus, onRefreshInterview, step]);
+
+    if (interview.interviewFlow === API_MASTERCLASS_FLOW) {
+        const apiMasterclassStep = step >= 3 ? 2 : 1;
+        const apiMasterclassSteps = [labels.steps[1], labels.steps[2]];
+        const apiMasterclassNextRequirement =
+            step === 2
+                ? hasTranscriptProgress
+                    ? null
+                    : labels.requirementTranscript
+                : step === 3 && !interview.hasInterviewFeedback
+                  ? labels.requirementInterview
+                  : null;
+        const apiMasterclassCanNavigateBack =
+            step > 2 && !isPersistingStep && !navigationLockMessage;
+        const apiMasterclassCanNavigateForward =
+            step === 2 &&
+            hasTranscriptProgress &&
+            !isPersistingStep &&
+            !navigationLockMessage;
+
+        return (
+            <div className="min-h-screen bg-gray-900 text-white">
+                <main className="mx-auto max-w-7xl px-4 py-10">
+                    <h1 className="text-3xl font-bold">{interview.title}</h1>
+                    <p className="mt-2 text-gray-400">
+                        {labels.step} {apiMasterclassStep} {labels.of} 2
+                    </p>
+
+                    <div className="mt-4 flex flex-wrap gap-2">
+                        {apiMasterclassSteps.map((label, index) => (
+                            <span
+                                key={label}
+                                className={`rounded-full px-3 py-1 text-xs ${
+                                    index + 1 === apiMasterclassStep
+                                        ? "bg-indigo-500 text-white"
+                                        : index + 1 < apiMasterclassStep
+                                          ? "bg-white/10 text-gray-200"
+                                          : "bg-white/5 text-gray-500"
+                                }`}
+                            >
+                                {index + 1}. {label}
+                            </span>
+                        ))}
+                    </div>
+
+                    {error ? <p className="mt-4 text-sm text-red-400">{error}</p> : null}
+
+                    <div className="mt-8 rounded-xl bg-gray-800/50 p-6 outline outline-1 outline-white/10">
+                        {step === 2 ? (
+                            <InterviewVoiceStep />
+                        ) : (
+                            <InterviewFeedback
+                                onEvaluationReady={() => void onRefreshInterview()}
+                                onNavigationStateChange={onFeedbackNavigationLockChange}
+                            />
+                        )}
+
+                        <div className="mt-6 flex justify-between">
+                            <button
+                                onClick={() => void persistStep(2)}
+                                disabled={!apiMasterclassCanNavigateBack}
+                                className="text-sm text-gray-400 disabled:opacity-30"
+                            >
+                                {labels.back}
+                            </button>
+
+                            {step === 2 ? (
+                                <div className="text-right">
+                                    {(navigationLockMessage || apiMasterclassNextRequirement) && (
+                                        <p className="mb-2 text-xs text-amber-300">
+                                            {navigationLockMessage || apiMasterclassNextRequirement}
+                                        </p>
+                                    )}
+                                    <button
+                                        onClick={() => void persistStep(3)}
+                                        disabled={!apiMasterclassCanNavigateForward}
+                                        className="rounded-md bg-indigo-500 px-4 py-2 disabled:cursor-not-allowed disabled:opacity-40"
+                                    >
+                                        {labels.next}
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="min-h-10" />
+                            )}
+                        </div>
+                    </div>
+                </main>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gray-900 text-white">
@@ -1192,6 +1286,7 @@ function InterviewDetailPageContent() {
             interviewMode={interview.interviewMode ?? "face"}
             config={config}
             plannedQuestions={interview.plannedQuestions}
+            callDurationSeconds={getCallDurationSecondsForFlow(interview.interviewFlow)}
         >
             <InterviewDetailStepContent
                 interview={interview}

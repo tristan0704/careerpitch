@@ -1,0 +1,8 @@
+export {
+    API_MASTERCLASS_CALL_DURATION_SECONDS,
+    API_MASTERCLASS_FLOW,
+    API_MASTERCLASS_INTERVIEW,
+    API_MASTERCLASS_QUESTIONS,
+    API_MASTERCLASS_TEMPLATE_ID,
+} from "@/lib/learn-challenges/api-masterclass/config";
+

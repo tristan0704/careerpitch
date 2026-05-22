@@ -2,6 +2,7 @@ import "server-only";
 
 import type {
     FaceAnalysisOverallStatus,
+    InterviewFlow,
     InterviewMode,
     InterviewQaPairSource,
     InterviewRecapStatus,
@@ -54,6 +55,7 @@ export type InterviewDetail = {
     experience: string;
     companySize: string;
     interviewMode: InterviewMode | null;
+    interviewFlow: InterviewFlow;
     currentStep: number;
     status: InterviewStatus;
     createdAt: string;
@@ -112,6 +114,7 @@ export type InterviewDetailLight = {
     experience: string;
     companySize: string;
     interviewMode: InterviewMode | null;
+    interviewFlow: InterviewFlow;
     currentStep: number;
     status: InterviewStatus;
     createdAt: string;
@@ -572,6 +575,7 @@ function mapInterviewCore(interview: {
     experience: string;
     companySize: string;
     interviewMode: InterviewMode | null;
+    interviewFlow: InterviewFlow;
     currentStep: number;
     status: InterviewStatus;
     createdAt: Date;
@@ -591,6 +595,7 @@ function mapInterviewCore(interview: {
         experience: interview.experience,
         companySize: interview.companySize,
         interviewMode: interview.interviewMode,
+        interviewFlow: interview.interviewFlow,
         currentStep: interview.currentStep,
         status: interview.status,
         createdAt: interview.createdAt.toISOString(),
@@ -731,6 +736,7 @@ async function getInterviewShellRowForUser(
             experience: true,
             companySize: true,
             interviewMode: true,
+            interviewFlow: true,
             currentStep: true,
             status: true,
             createdAt: true,
@@ -879,6 +885,7 @@ export async function getInterviewStatusForUser(
             startedAt: true,
             completedAt: true,
             interviewMode: true,
+            interviewFlow: true,
             runtimeTranscriptStatus: true,
             runtimeTranscriptError: true,
             statusVersion: true,
@@ -928,6 +935,7 @@ export async function getInterviewStatusForUser(
         startedAt: interview.startedAt?.toISOString() ?? null,
         completedAt: interview.completedAt?.toISOString() ?? null,
         interviewMode: interview.interviewMode,
+        interviewFlow: interview.interviewFlow,
         transcriptStatus: interview.transcript?.transcriptStatus ?? null,
         transcriptError: interview.transcript?.transcriptError ?? "",
         hasCvFeedback: Boolean(interview.cvFeedbackAnalysisId),
@@ -1340,6 +1348,7 @@ export async function updateInterviewProgressForUser(args: {
                 status: true,
                 currentStep: true,
                 interviewMode: true,
+                interviewFlow: true,
                 createdAt: true,
                 startedAt: true,
                 completedAt: true,

@@ -24,6 +24,11 @@ enum InterviewMode {
   face
 }
 
+enum InterviewFlow {
+  standard
+  apiMasterclass
+}
+
 enum InterviewTranscriptStatus {
   idle
   recording
@@ -188,6 +193,7 @@ model Interview {
   experience              String                  @default("")
   companySize             String                  @default("")
   interviewMode           InterviewMode?
+  interviewFlow           InterviewFlow           @default(standard)
   currentStep             Int                     @default(1)
   status                  InterviewStatus         @default(draft)
   startedAt               DateTime?

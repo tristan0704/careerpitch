@@ -32,6 +32,13 @@
           "matchers": ["data / ai", "data ai", "data", "ai"],
           "text": "Guten Tag und willkommen zum technischen Interview für die Rolle Data und AI.",
           "assetPath": "/audio/voice-host/zephyr/greeting-data-ai.wav"
+        },
+        {
+          "id": "api-masterclass",
+          "roleLabel": "API Masterclass",
+          "matchers": ["api masterclass"],
+          "text": "Guten Tag und willkommen zur API Masterclass. In diesem zehnminuetigen Voice Interview geht es um sauberes API Design, Authentifizierung, Fehlerfaelle und Produktionsdenken.",
+          "assetPath": "/audio/voice-host/zephyr/greeting-api-masterclass.wav"
         }
       ],
       "genericGreeting": {
@@ -46,6 +53,13 @@
           "matchers": ["fullstack developer", "fullstack"],
           "text": "Wie gehst du bei einem Fullstack-Feature vor, damit Frontend, Backend und Datenmodell sauber zusammenspielen und am Ende ein stabiler Nutzerflow entsteht?",
           "assetPath": "/audio/voice-host/zephyr/first-question-fullstack-developer.wav"
+        },
+        {
+          "id": "api-masterclass-first-question",
+          "roleLabel": "API Masterclass",
+          "matchers": ["api masterclass"],
+          "text": "Du sollst eine kleine REST API fuer ein Produktfeature entwerfen. Welche Ressourcen, Endpunkte und Daten wuerdest du zuerst definieren?",
+          "assetPath": "/audio/voice-host/zephyr/first-question-api-masterclass.wav"
         }
       ],
       "genericFirstQuestion": {
@@ -58,6 +72,15 @@
         "text": "Zum Abschluss noch eine letzte kurze Frage: Warum bist du für diese Rolle jetzt konkret die richtige Besetzung?",
         "assetPath": "/audio/voice-host/zephyr/last-question.wav"
       },
+      "farewells": [
+        {
+          "id": "api-masterclass-farewell",
+          "roleLabel": "API Masterclass",
+          "matchers": ["api masterclass"],
+          "text": "Vielen Dank fuer deine Antworten in der API Masterclass. Das Voice Interview ist beendet, und deine Auswertung wird jetzt vorbereitet.",
+          "assetPath": "/audio/voice-host/zephyr/farewell-api-masterclass.wav"
+        }
+      ],
       "farewell": {
         "id": "farewell",
         "text": "Vielen Dank für das Gespräch. Das Interview ist hiermit beendet.",
@@ -98,6 +121,13 @@
           "matchers": ["data / ai", "data ai", "data", "ai"],
           "text": "Hello and welcome to the technical interview for the Data and AI role.",
           "assetPath": "/audio/voice-host/zephyr/greeting-data-ai-en.wav"
+        },
+        {
+          "id": "api-masterclass",
+          "roleLabel": "API Masterclass",
+          "matchers": ["api masterclass"],
+          "text": "Hello and welcome to the API Masterclass. In this ten minute voice interview, we will focus on clean API design, authentication, failure cases, and production thinking.",
+          "assetPath": "/audio/voice-host/zephyr/greeting-api-masterclass-en.wav"
         }
       ],
       "genericGreeting": {
@@ -112,6 +142,13 @@
           "matchers": ["fullstack developer", "fullstack"],
           "text": "How do you approach a fullstack feature so that the frontend, backend, and data model work together cleanly and result in a stable user flow?",
           "assetPath": "/audio/voice-host/zephyr/first-question-fullstack-developer-en.wav"
+        },
+        {
+          "id": "api-masterclass-first-question",
+          "roleLabel": "API Masterclass",
+          "matchers": ["api masterclass"],
+          "text": "You need to design a small REST API for a product feature. Which resources, endpoints, and data would you define first?",
+          "assetPath": "/audio/voice-host/zephyr/first-question-api-masterclass-en.wav"
         }
       ],
       "genericFirstQuestion": {
@@ -124,6 +161,15 @@
         "text": "One final short question to close: why are you the right person for this role right now?",
         "assetPath": "/audio/voice-host/zephyr/last-question-en.wav"
       },
+      "farewells": [
+        {
+          "id": "api-masterclass-farewell",
+          "roleLabel": "API Masterclass",
+          "matchers": ["api masterclass"],
+          "text": "Thank you for your answers in the API Masterclass. The voice interview is complete, and your feedback is now being prepared.",
+          "assetPath": "/audio/voice-host/zephyr/farewell-api-masterclass-en.wav"
+        }
+      ],
       "farewell": {
         "id": "farewell",
         "text": "Thank you for the conversation. The interview is now complete.",

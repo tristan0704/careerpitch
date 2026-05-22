@@ -4,6 +4,7 @@ import { LearnChallengePlaceholders } from "@/components/learn/LearnChallengePla
 import { LearnStartSimulationPanel } from "@/components/learn/LearnStartSimulationPanel";
 import { getCurrentAppUser } from "@/db-backend/auth/current-app-user";
 import { getProfileSnapshot } from "@/db-backend/profile/profile-service";
+import { API_MASTERCLASS_TEMPLATE_ID } from "@/lib/learn-challenges/api-masterclass";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export default async function LearnPage() {
@@ -15,6 +16,14 @@ export default async function LearnPage() {
 
     const profile = await getProfileSnapshot(currentUser.id);
     const labels = getDictionary(profile.language).learn;
+    const futureChallengeItems = labels.futureChallenges.items.map((item) =>
+        item.id === API_MASTERCLASS_TEMPLATE_ID
+            ? {
+                  ...item,
+                  startEndpoint: "/api/learn/challenges/api-masterclass/start",
+              }
+            : item
+    );
 
     return (
         <div className="min-h-screen bg-gray-900 text-white">
@@ -31,7 +40,10 @@ export default async function LearnPage() {
                 />
 
                 <LearnChallengePlaceholders
-                    items={labels.futureChallenges.items}
+                    items={futureChallengeItems}
+                    startErrorLabel={labels.futureChallenges.startError}
+                    startPendingLabel={labels.futureChallenges.starting}
+                    startReadyLabel={labels.futureChallenges.start}
                     title={labels.futureChallenges.title}
                 />
             </main>

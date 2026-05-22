@@ -3,10 +3,10 @@
 import { useCallback, useRef, type MutableRefObject } from "react"
 import { normalizeTranscriptText, type Speaker } from "@/lib/interview-transcript"
 import {
-    getFarewellPhrase,
     getLastQuestionPhrase,
     getTechnicalErrorFarewellPhrase,
     HOST_CLOSING_HARD_STOP_TIMEOUT_MS,
+    resolveFarewellPhrase,
 } from "@/lib/voice-interview/playback/host-phrases"
 import {
     decideLastMinuteAction,
@@ -21,6 +21,7 @@ import type { CallLifecyclePhase, ConnectionStatus, StopReason } from "@/lib/voi
 type StopCallRef = MutableRefObject<((options?: { terminalStatus?: ConnectionStatus; closeSession?: boolean }) => Promise<void>) | null>
 
 type UseVoiceEndgameArgs = {
+    role: string
     language: string
     callTimingRef: MutableRefObject<CallTiming | null>
     stopCallInFlightRef: MutableRefObject<boolean>
@@ -40,10 +41,11 @@ type UseVoiceEndgameArgs = {
     cancelHostPlayback: () => void
     flushPendingTranscript: (speaker: Extract<Speaker, "candidate" | "interviewer">, fallbackText?: string) => void
     appendTranscript: (speaker: Speaker, text: string, options?: { mergeWithPrevious?: boolean }) => void
-    playHostPhrase: (phrase: ReturnType<typeof getFarewellPhrase>, options?: { appendTranscriptSpeaker?: Speaker }) => Promise<boolean>
+    playHostPhrase: (phrase: ReturnType<typeof resolveFarewellPhrase>, options?: { appendTranscriptSpeaker?: Speaker }) => Promise<boolean>
 }
 
 export function useVoiceEndgame({
+    role,
     language,
     callTimingRef,
     stopCallInFlightRef,
@@ -296,7 +298,7 @@ export function useVoiceEndgame({
             flushPendingTranscript("interviewer")
             detachRealtimeSession()
 
-            const farewellPhrase = reason === "technicalError" ? getTechnicalErrorFarewellPhrase(language) : getFarewellPhrase(language)
+            const farewellPhrase = reason === "technicalError" ? getTechnicalErrorFarewellPhrase(language) : resolveFarewellPhrase(role, language)
             const terminalStatus: ConnectionStatus = reason === "technicalError" ? "error" : "idle"
 
             if (reason === "goAway") {
@@ -332,6 +334,7 @@ export function useVoiceEndgame({
             flushPendingTranscript,
             language,
             playHostPhrase,
+            role,
             stopCallInFlightRef,
             stopCallRef,
             stopScheduledPlayback,

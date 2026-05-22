@@ -3,6 +3,7 @@ import "server-only"
 import { GoogleGenAI, MediaResolution, Modality } from "@google/genai"
 
 import {
+  type InterviewQuestion,
   getInterviewQuestionPool,
   getRegionalTechContextGuidance,
 } from "@/lib/questionpool"
@@ -108,8 +109,10 @@ function getRoleInterviewGuidance(role: string) {
  * 1. [project-experience] Erzähle von einem Projekt...
  * 2. [debugging] Wie gehst du beim Debugging vor?
  */
-function serializeQuestionPlan(role: string) {
-  const questionPlan = getInterviewQuestionPool(role)
+function serializeQuestionPlan(role: string, questionPlanOverride?: InterviewQuestion[]) {
+  const questionPlan = questionPlanOverride && questionPlanOverride.length > 0
+      ? questionPlanOverride
+      : getInterviewQuestionPool(role)
 
   return questionPlan
       .map((question, index) => `${index + 1}. [${question.id}] ${question.text}`)
@@ -131,17 +134,23 @@ function serializeQuestionPlan(role: string) {
  * - maximal eine Rückfrage pro Kernfrage
  * - Question Plan bevorzugt in Reihenfolge
  */
-function createSystemInstruction(role: string, language: unknown = "de") {
+function createSystemInstruction(
+  role: string,
+  language: unknown = "de",
+  questionPlanOverride?: InterviewQuestion[],
+  callDurationSeconds = 300
+) {
   const outputLanguage = normalizeLanguage(language)
-  const serializedPlan = serializeQuestionPlan(role)
+  const serializedPlan = serializeQuestionPlan(role, questionPlanOverride)
   const roleGuidance = getRoleInterviewGuidance(role)
   const regionalGuidance = getRegionalTechContextGuidance()
+  const durationMinutes = Math.max(1, Math.round(callDurationSeconds / 60))
 
   if (outputLanguage === "en") {
     return [
       "You are a professional English-speaking interviewer in a technical live interview.",
       `The target role is: ${role}.`,
-      "The interview is a short technical screening of about 5 minutes total.",
+      `The interview is a short technical screening of about ${durationMinutes} minutes total.`,
       "The internal question plan may contain German text; translate it naturally into English before speaking.",
 
       "",
@@ -181,7 +190,7 @@ function createSystemInstruction(role: string, language: unknown = "de") {
   return [
     "Du bist ein professioneller, deutschsprachiger Interviewer in einem technischen Live-Interview.",
     `Die Zielrolle ist: ${role}.`,
-    "Das Interview ist ein kurzer Techniktest von ungefähr 5 Minuten Gesamtdauer.",
+    `Das Interview ist ein kurzer Techniktest von ungefaehr ${durationMinutes} Minuten Gesamtdauer.`,
 
     "",
     "Interview-Stil:",
@@ -225,6 +234,8 @@ type CreateLiveInterviewTokenArgs = {
   apiKey: string
   role: string
   language?: string
+  questionPlan?: InterviewQuestion[]
+  sessionTtlMs?: number
 }
 
 /**
@@ -237,6 +248,8 @@ export async function createLiveInterviewToken({
                                                  apiKey,
                                                  role,
                                                  language = "de",
+                                                 questionPlan,
+                                                 sessionTtlMs = LIVE_SESSION_TTL_MS,
                                                }: CreateLiveInterviewTokenArgs) {
   const ai = new GoogleGenAI({
     apiKey,
@@ -245,7 +258,7 @@ export async function createLiveInterviewToken({
     },
   })
 
-  const newSessionExpireTime = new Date(Date.now() + LIVE_SESSION_TTL_MS).toISOString()
+  const newSessionExpireTime = new Date(Date.now() + sessionTtlMs).toISOString()
 
   const token = await ai.authTokens.create({
     config: {
@@ -281,7 +294,7 @@ export async function createLiveInterviewToken({
             },
           },
 
-          systemInstruction: createSystemInstruction(role, language),
+          systemInstruction: createSystemInstruction(role, language, questionPlan, Math.max(60, Math.round(sessionTtlMs / 1000) - 120)),
         },
       },
 

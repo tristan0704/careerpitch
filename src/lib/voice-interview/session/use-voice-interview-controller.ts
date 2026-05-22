@@ -37,7 +37,8 @@ export function useVoiceInterviewController(
     questionPlanOverride?: ReturnType<typeof getInterviewQuestionPool>,
     interviewId?: string,
     interviewMode: "voice" | "face" = "face",
-    language: string = "de"
+    language: string = "de",
+    callDurationSeconds: number = CALL_DURATION_SECONDS
 ) {
     /**
      * Falls von außen ein fertiger Question Plan reinkommt, verwenden wir ihn.
@@ -69,7 +70,7 @@ export function useVoiceInterviewController(
     /**
      * Countdown-Anzeige für die verbleibende Gesprächsdauer.
      */
-    const [secondsLeft, setSecondsLeft] = useState(CALL_DURATION_SECONDS)
+    const [secondsLeft, setSecondsLeft] = useState(callDurationSeconds)
 
     // ----------------------------
     // Refs: Realtime / Audio / Session
@@ -321,6 +322,7 @@ export function useVoiceInterviewController(
      * - kontrolliertes Beenden
      */
     const endgame = useVoiceEndgame({
+        role,
         language,
         callTimingRef,
         stopCallInFlightRef,
@@ -403,6 +405,7 @@ export function useVoiceInterviewController(
     const { startCall } = useVoiceSessionLifecycle({
         role,
         language,
+        callDurationSeconds,
         questionPlan,
         faceAnalysisEnabled: interviewMode === "face",
         faceLandmarkPanelRef,

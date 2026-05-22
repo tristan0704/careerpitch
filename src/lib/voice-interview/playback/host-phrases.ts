@@ -23,6 +23,7 @@ type LanguagePhraseSet = {
     firstQuestions: GreetingPhraseConfig[]
     genericFirstQuestion: FixedPhraseConfig
     lastQuestion: FixedPhraseConfig
+    farewells?: GreetingPhraseConfig[]
     farewell: FixedPhraseConfig
     technicalErrorFarewell: FixedPhraseConfig
 }
@@ -96,6 +97,11 @@ export function getLastQuestionPhrase(language: unknown = "de"): HostVoicePhrase
 export function getFarewellPhrase(language: unknown = "de"): HostVoicePhrase {
     const phraseSet = getPhraseSet(language)
     return withPhraseLanguage(phraseSet.phrases.farewell, phraseSet.language)
+}
+
+export function resolveFarewellPhrase(role: string, language: unknown = "de"): HostVoicePhrase {
+    const phraseSet = getPhraseSet(language)
+    return resolveRolePhrase(role, phraseSet.language, phraseSet.phrases.farewells ?? [], phraseSet.phrases.farewell)
 }
 
 export function getTechnicalErrorFarewellPhrase(language: unknown = "de"): HostVoicePhrase {

@@ -16,7 +16,6 @@ import { mergeModelTurnText } from "@/lib/live-interviewer-turns"
 import { resolveGreetingPhrase, resolveOpeningQuestionPhrase } from "@/lib/voice-interview/playback/host-phrases"
 import { createCallTiming } from "@/lib/voice-interview/session/endgame"
 import {
-    CALL_DURATION_SECONDS,
     LIVE_INPUT_PREFIX_PADDING_MS,
     LIVE_INPUT_SILENCE_DURATION_MS,
     LIVE_MODEL,
@@ -28,6 +27,7 @@ import type { UseVoiceSessionLifecycleArgs } from "@/lib/voice-interview/session
 export function useVoiceSessionLifecycle({
                                              role,
                                              language,
+                                             callDurationSeconds,
                                              questionPlan,
                                              faceAnalysisEnabled,
                                              faceLandmarkPanelRef,
@@ -157,13 +157,13 @@ export function useVoiceSessionLifecycle({
         const targetEndAtMs = callTimingRef.current?.targetEndAtMs
 
         if (!targetEndAtMs) {
-            setSecondsLeft(CALL_DURATION_SECONDS)
+            setSecondsLeft(callDurationSeconds)
             return
         }
 
         const remainingMs = Math.max(0, targetEndAtMs - Date.now())
         setSecondsLeft(Math.ceil(remainingMs / 1_000))
-    }, [callTimingRef, setSecondsLeft])
+    }, [callDurationSeconds, callTimingRef, setSecondsLeft])
 
     // ----------------------------
     // Gemeinsame Fehlerbehandlung beim Start
@@ -422,7 +422,7 @@ export function useVoiceSessionLifecycle({
             updateConnectionStatus(terminalStatus)
             updateCallLifecyclePhase("idle")
             callTimingRef.current = null
-            setSecondsLeft(CALL_DURATION_SECONDS)
+            setSecondsLeft(callDurationSeconds)
 
             // interne Endgame-/Timing-/Transcript-Zustände zurücksetzen
             clearEndgameTimers()
@@ -476,6 +476,7 @@ export function useVoiceSessionLifecycle({
         }
     }, [
         callTimingRef,
+        callDurationSeconds,
         faceAnalysisEnabled,
         faceLandmarkPanelRef,
         setSecondsLeft,
@@ -630,7 +631,11 @@ export function useVoiceSessionLifecycle({
         const tokenResponse = await fetch("/api/gemini/live-token", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ role }),
+            body: JSON.stringify({
+                role,
+                questionPlan,
+                callDurationSeconds,
+            }),
         })
 
         const tokenData = (await tokenResponse.json()) as Partial<LiveTokenResponse> & { error?: string }
@@ -640,7 +645,7 @@ export function useVoiceSessionLifecycle({
         }
 
         return tokenData
-    }, [role])
+    }, [callDurationSeconds, questionPlan, role])
 
     // ----------------------------
     // Live-Session verbinden
@@ -797,7 +802,7 @@ export function useVoiceSessionLifecycle({
         resetTiming()
         sessionShutdownRequestedRef.current = false
         updateCallLifecyclePhase("opening")
-        setSecondsLeft(CALL_DURATION_SECONDS)
+        setSecondsLeft(callDurationSeconds)
         resetClosingState(true)
         callTimingRef.current = null
         clearClosingHardStopTimer()
@@ -840,7 +845,7 @@ export function useVoiceSessionLifecycle({
             }
 
             // Timing starten
-            callTimingRef.current = createCallTiming()
+            callTimingRef.current = createCallTiming(Date.now(), callDurationSeconds)
             syncCountdown()
 
             /**
@@ -877,6 +882,7 @@ export function useVoiceSessionLifecycle({
     }, [
         audioContextRef,
         callLifecyclePhaseRef,
+        callDurationSeconds,
         callTimingRef,
         candidateAudioSuppressedRef,
         cancelHostPlayback,
@@ -887,7 +893,6 @@ export function useVoiceSessionLifecycle({
         failStart,
         fetchLiveToken,
         getStartValidationError,
-        role,
         sessionRef,
         sessionShutdownRequestedRef,
         setError,

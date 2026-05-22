@@ -35,6 +35,10 @@ function getPhraseEntries() {
             entries.push({ language, ...phrase });
         }
 
+        for (const phrase of phraseSet.farewells ?? []) {
+            entries.push({ language, ...phrase });
+        }
+
         entries.push({ language, ...phraseSet.genericGreeting });
         entries.push({ language, ...phraseSet.genericFirstQuestion });
         entries.push({ language, ...phraseSet.lastQuestion });

@@ -21,6 +21,7 @@ type InterviewSessionValue = {
     role: string;
     config: InterviewCvConfig;
     plannedQuestions: PlannedQuestion[];
+    callDurationSeconds?: number;
     voiceInterview: ReturnType<typeof useVoiceInterviewController>;
 };
 
@@ -42,6 +43,7 @@ function InterviewSessionScope({
     role,
     config,
     plannedQuestions,
+    callDurationSeconds,
     children,
 }: {
     interviewId: string;
@@ -49,6 +51,7 @@ function InterviewSessionScope({
     role: string;
     config: InterviewCvConfig;
     plannedQuestions: PlannedQuestion[];
+    callDurationSeconds?: number;
     children: ReactNode;
 }) {
     const { language } = useI18n();
@@ -59,7 +62,8 @@ function InterviewSessionScope({
             : undefined,
         interviewId,
         interviewMode,
-        language
+        language,
+        callDurationSeconds
     );
 
     return (
@@ -70,6 +74,7 @@ function InterviewSessionScope({
                 role,
                 config,
                 plannedQuestions,
+                callDurationSeconds,
                 voiceInterview,
             }}
         >
@@ -83,12 +88,14 @@ export function InterviewSessionProvider({
     interviewMode,
     config,
     plannedQuestions,
+    callDurationSeconds,
     children,
 }: {
     interviewId: string;
     interviewMode: InterviewMode;
     config: InterviewCvConfig;
     plannedQuestions: PlannedQuestion[];
+    callDurationSeconds?: number;
     children: ReactNode;
 }) {
     const role = config.role.trim() || "Backend Developer";
@@ -98,6 +105,7 @@ export function InterviewSessionProvider({
         role,
         config.experience,
         config.companySize,
+        callDurationSeconds ?? "default",
         plannedQuestions.map((question) => question.questionKey ?? question.text).join("|"),
     ].join("|");
 
@@ -109,6 +117,7 @@ export function InterviewSessionProvider({
             role={role}
             config={config}
             plannedQuestions={plannedQuestions}
+            callDurationSeconds={callDurationSeconds}
         >
             {children}
         </InterviewSessionScope>

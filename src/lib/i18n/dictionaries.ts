@@ -202,38 +202,47 @@ export const dictionaries = {
             },
             futureChallenges: {
                 title: "Coming soon",
+                start: "Starten",
+                starting: "Startet",
+                startError: "API Masterclass konnte nicht gestartet werden.",
                 items: [
                     {
+                        id: "startup-coding-20",
                         title: "Startup Coding 20",
                         description:
                             "20 kurze Coding-Szenarien mit Startup-Logik, Produktentscheidungen und sauberen Edge Cases.",
                         status: "Coming soon",
                     },
                     {
+                        id: "api-masterclass-voice",
                         title: "API Masterclass Voice",
                         description:
                             "Trainiere API-Design, Auth, Fehlerfälle und Trade-offs als gesprochenes Interview.",
                         status: "Coming soon",
                     },
                     {
+                        id: "frontend-system-lab",
                         title: "Frontend System Lab",
                         description:
                             "UI-Architektur, State-Management und Performance-Fragen für moderne React-Apps.",
                         status: "Coming soon",
                     },
                     {
+                        id: "backend-debug-arena",
                         title: "Backend Debug Arena",
                         description:
                             "Fehlerbilder aus Datenbanken, Queues, Caching und API-Logs unter Interviewdruck lösen.",
                         status: "Coming soon",
                     },
                     {
+                        id: "data-structures-sprint",
                         title: "Data Structures Sprint",
                         description:
                             "Kompakte Übungen zu Arrays, Maps, Trees und Laufzeitdenken mit klarem Feedback.",
                         status: "Coming soon",
                     },
                     {
+                        id: "behavioral-story-builder",
                         title: "Behavioral Story Builder",
                         description:
                             "STAR-Antworten für Konflikte, Ownership, Teamarbeit und technische Entscheidungen schärfen.",
@@ -851,38 +860,47 @@ export const dictionaries = {
             },
             futureChallenges: {
                 title: "Coming soon",
+                start: "Start",
+                starting: "Starting",
+                startError: "API Masterclass could not be started.",
                 items: [
                     {
+                        id: "startup-coding-20",
                         title: "Startup Coding 20",
                         description:
                             "20 short coding scenarios with startup logic, product decisions, and clean edge cases.",
                         status: "Coming soon",
                     },
                     {
+                        id: "api-masterclass-voice",
                         title: "API Masterclass Voice",
                         description:
                             "Practice API design, auth, failure cases, and trade-offs as a spoken interview.",
                         status: "Coming soon",
                     },
                     {
+                        id: "frontend-system-lab",
                         title: "Frontend System Lab",
                         description:
                             "UI architecture, state management, and performance questions for modern React apps.",
                         status: "Coming soon",
                     },
                     {
+                        id: "backend-debug-arena",
                         title: "Backend Debug Arena",
                         description:
                             "Solve database, queue, caching, and API log failure modes under interview pressure.",
                         status: "Coming soon",
                     },
                     {
+                        id: "data-structures-sprint",
                         title: "Data Structures Sprint",
                         description:
                             "Compact practice for arrays, maps, trees, and runtime thinking with clear feedback.",
                         status: "Coming soon",
                     },
                     {
+                        id: "behavioral-story-builder",
                         title: "Behavioral Story Builder",
                         description:
                             "Sharpen STAR answers for conflict, ownership, teamwork, and technical decisions.",

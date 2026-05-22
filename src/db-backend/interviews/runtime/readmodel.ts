@@ -1,6 +1,7 @@
 import "server-only";
 
 import type {
+    InterviewFlow,
     InterviewMode,
     InterviewStatus,
     InterviewTranscriptStatus,
@@ -15,6 +16,7 @@ export type InterviewStatusSnapshot = {
     startedAt: string | null;
     completedAt: string | null;
     interviewMode: InterviewMode | null;
+    interviewFlow: InterviewFlow;
     transcriptStatus: InterviewTranscriptStatus | null;
     transcriptError: string;
     hasCvFeedback: boolean;
@@ -32,6 +34,7 @@ export const interviewRuntimeStatusSelect = {
     startedAt: true,
     completedAt: true,
     interviewMode: true,
+    interviewFlow: true,
     runtimeTranscriptStatus: true,
     runtimeTranscriptError: true,
     hasCvFeedback: true,
@@ -49,6 +52,7 @@ type InterviewRuntimeStatusRow = {
     startedAt: Date | null;
     completedAt: Date | null;
     interviewMode: InterviewMode | null;
+    interviewFlow: InterviewFlow;
     runtimeTranscriptStatus: InterviewTranscriptStatus | null;
     runtimeTranscriptError: string | null;
     hasCvFeedback: boolean;
@@ -106,6 +110,7 @@ export function mapInterviewRuntimeStatus(
         startedAt: interview.startedAt?.toISOString() ?? null,
         completedAt: interview.completedAt?.toISOString() ?? null,
         interviewMode: interview.interviewMode,
+        interviewFlow: interview.interviewFlow,
         transcriptStatus: interview.runtimeTranscriptStatus,
         transcriptError: interview.runtimeTranscriptError ?? "",
         hasCvFeedback: interview.hasCvFeedback,
