@@ -10,6 +10,7 @@ import {
     CvFeedbackSurface,
     CvStatusBadge,
 } from "@/components/cv/feedback/CvFeedbackSurface";
+import { LoadingState } from "@/components/ui/LoadingState";
 
 type ActiveCvSummary = {
     fileName: string;
@@ -127,12 +128,20 @@ export function CvFeedbackStateCard({
 
 export function CvReportLoadingCard({
     children,
+    loading = true,
 }: {
     children: ReactNode;
+    loading?: boolean;
 }) {
     return (
         <CvFeedbackSurface className="p-10 text-center text-sm text-gray-400">
-            {children}
+            {loading ? (
+                <LoadingState className="justify-center bg-transparent outline-0" compact>
+                    {children}
+                </LoadingState>
+            ) : (
+                children
+            )}
         </CvFeedbackSurface>
     );
 }
@@ -140,7 +149,9 @@ export function CvReportLoadingCard({
 function StatePanel({ children }: { children: ReactNode }) {
     return (
         <CvFeedbackPanel>
-            <p className="text-sm text-gray-400">{children}</p>
+            <LoadingState className="bg-transparent outline-0" compact>
+                {children}
+            </LoadingState>
         </CvFeedbackPanel>
     );
 }

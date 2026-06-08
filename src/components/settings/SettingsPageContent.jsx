@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { LoadingState } from "@/components/ui/LoadingState";
 import { useI18n } from "@/lib/i18n/context";
 
 function getErrorMessage(error, fallback) {
@@ -120,9 +121,7 @@ export default function SettingsPageContent({ initialSettings }) {
 
                 <div className="mt-8 space-y-6">
                     {loading ? (
-                        <div className="rounded-xl bg-gray-800/50 p-4 text-sm text-gray-400 outline outline-1 outline-white/10">
-                            {labels.loading}
-                        </div>
+                        <LoadingState label={labels.loading} compact />
                     ) : null}
 
                     <div className="rounded-xl bg-gray-800/50 p-6 outline outline-1 outline-white/10 space-y-4">

@@ -2,6 +2,7 @@
 
 import { lazy, Suspense, type ReactNode } from "react";
 
+import { LoadingState } from "@/components/ui/LoadingState";
 import { useI18n } from "@/lib/i18n/context";
 import type { AppDictionary } from "@/lib/i18n/dictionaries";
 import { formatCountdown } from "@/lib/questionpool";
@@ -232,7 +233,11 @@ function VoiceInterviewContent({
                     <Suspense
                         fallback={
                             <div className="min-h-[360px] rounded-xl bg-gray-900 p-6 text-sm text-gray-400 outline outline-1 outline-white/10">
-                                {labels.cameraSetupLoading}
+                                <LoadingState
+                                    label={labels.cameraSetupLoading}
+                                    className="bg-transparent outline-0"
+                                    compact
+                                />
                             </div>
                         }
                     >

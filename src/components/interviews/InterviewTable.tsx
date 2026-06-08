@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import DeleteDialog from "@/components/ui/DeleteDialog";
+import { LoadingState } from "@/components/ui/LoadingState";
 import { useI18n } from "@/lib/i18n/context";
 import type { AppDictionary } from "@/lib/i18n/dictionaries";
 
@@ -181,9 +182,7 @@ export default function InterviewTable({
 
     if (loading) {
         return (
-            <div className="rounded-xl bg-gray-800/50 p-6 text-sm text-gray-400 outline outline-1 outline-white/10">
-                {labels.loading}
-            </div>
+            <LoadingState label={labels.loading} />
         );
     }
 

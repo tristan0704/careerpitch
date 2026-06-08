@@ -49,7 +49,7 @@ export default function DatenschutzPage() {
     <PublicPageShell
       eyebrow="DSGVO"
       title="Datenschutzhinweise"
-      intro="Diese Seite bildet die Datenschutzstruktur für CommIT ab. Da im Repository keine verifizierten Betreiber- und Verarbeitungsangaben vorliegen, sind die noch offenen Stellen bewusst als Platzhalter markiert."
+      intro="Diese Seite bildet die Datenschutzstruktur für CommIT ab. Da es sich derzeit nur um ein Semesterprojekt von Studenten der FH Hagenebrg handelt (was derzeit noch in der Entwicklungsphase ist), haben wir nur eine provisorische DSGVO-Seite hinterlegt. Es handelt sich derzeit ausdrücklich nur um einen technischen Test.."
     >
       {DATA_POLICY_SECTIONS.map((section) => (
         <section key={section.heading}>

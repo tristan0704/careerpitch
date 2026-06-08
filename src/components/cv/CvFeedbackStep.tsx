@@ -256,7 +256,9 @@ export default function CvFeedbackStep({
             ) : null}
 
             {!loading && !result ? (
-                <CvReportLoadingCard>{labels.emptyReportHint}</CvReportLoadingCard>
+                <CvReportLoadingCard loading={false}>
+                    {labels.emptyReportHint}
+                </CvReportLoadingCard>
             ) : null}
         </div>
     );

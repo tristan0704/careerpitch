@@ -2,12 +2,19 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import {
+    CodingChallengeBadge,
+    CodingChallengePanel,
+    CodingChallengeProgressBar,
+    CodingChallengeSectionHeading,
+    CodingChallengeSurface,
+} from "@/components/coding-challenge/coding-challenge-surface";
+import { readApiErrorMessage } from "@/lib/api-error";
 import { LANGUAGE_LABELS } from "@/lib/coding-challenge/labels";
 import type {
     CodingChallengeDraft,
     CodingChallengeEvaluation,
 } from "@/lib/coding-challenge/types";
-import { readApiErrorMessage } from "@/lib/api-error";
 import { useI18n } from "@/lib/i18n/context";
 import { useInterviewSession } from "@/lib/interview-session/context";
 
@@ -61,46 +68,45 @@ function ScoreCard({
     const tone = getScoreTone(value, toneLabels);
 
     return (
-        <section className="rounded-xl border border-white/10 bg-gray-900 p-5">
+        <CodingChallengePanel>
             <div className="flex items-center justify-between gap-3">
-                <p className="text-sm font-medium text-gray-200">{title}</p>
+                <p className="text-sm font-semibold text-gray-200">{title}</p>
                 <span className={`rounded-full px-3 py-1 text-xs ${tone.badge}`}>
                     {value}%
                 </span>
             </div>
 
-            <div className="mt-3 h-2 rounded-full bg-gray-800">
-                <div
-                    className={`h-2 rounded-full ${tone.bar}`}
-                    style={{ width: `${value}%` }}
-                />
+            <div className="mt-3">
+                <CodingChallengeProgressBar value={value} className={tone.bar} />
             </div>
 
-            <p className="mt-3 text-sm text-gray-300">{feedback}</p>
-        </section>
+            <p className="mt-3 text-sm leading-6 text-gray-300">{feedback}</p>
+        </CodingChallengePanel>
     );
 }
 
 function ListCard({
     title,
     items,
+    emptyLabel,
 }: {
     title: string;
     items: string[];
+    emptyLabel: string;
 }) {
     return (
-        <section className="rounded-xl border border-white/10 bg-gray-900 p-5">
-            <p className="text-xs uppercase tracking-[0.2em] text-gray-400">
+        <CodingChallengePanel>
+            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-gray-500">
                 {title}
             </p>
             <ul className="mt-3 space-y-2 text-sm text-gray-200">
                 {items.length > 0 ? (
                     items.map((item) => <li key={item}>{item}</li>)
                 ) : (
-                    <li className="text-gray-500">Keine Einträge vorhanden.</li>
+                    <li className="text-gray-500">{emptyLabel}</li>
                 )}
             </ul>
-        </section>
+        </CodingChallengePanel>
     );
 }
 
@@ -172,7 +178,7 @@ export default function CodingChallengeFeedback() {
                     setError(
                         loadError instanceof Error
                             ? loadError.message
-                        : "Coding-Challenge konnte nicht geladen werden."
+                            : "Coding-Challenge konnte nicht geladen werden."
                     );
                 }
             } finally {
@@ -191,17 +197,17 @@ export default function CodingChallengeFeedback() {
 
     if (error) {
         return (
-            <div className="rounded-xl border border-white/10 bg-gray-900 p-6 text-sm text-red-300">
+            <CodingChallengeSurface className="text-sm text-red-300">
                 {error}
-            </div>
+            </CodingChallengeSurface>
         );
     }
 
     if (!evaluation) {
         return (
-            <div className="rounded-xl border border-white/10 bg-gray-900 p-6 text-sm text-gray-300">
+            <CodingChallengeSurface className="text-sm text-gray-300">
                 {dictionary.coding.submitFirst}
-            </div>
+            </CodingChallengeSurface>
         );
     }
 
@@ -210,29 +216,45 @@ export default function CodingChallengeFeedback() {
 
     return (
         <div className="space-y-6">
-            <section className="rounded-xl border border-white/10 bg-gray-900 p-5">
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                    <div className="space-y-2">
-                        <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.2em] text-gray-400">
-                            {task ? <span>{task.role}</span> : null}
-                            {task ? <span>{dictionary.coding.difficulty[task.difficulty]}</span> : null}
-                            {task ? <span>{LANGUAGE_LABELS[task.language]}</span> : null}
-                            <span>
+            <CodingChallengeSurface className="!p-0 overflow-hidden">
+                <div className="flex flex-col items-stretch md:flex-row">
+                    <div className="min-w-0 flex-1 space-y-5 p-6 md:p-8">
+                        <div className="flex flex-wrap items-center gap-2">
+                            {task ? (
+                                <CodingChallengeBadge className="bg-indigo-500/10 text-indigo-300 outline-indigo-300/20">
+                                    {task.role}
+                                </CodingChallengeBadge>
+                            ) : null}
+                            {task ? (
+                                <CodingChallengeBadge>
+                                    {dictionary.coding.difficulty[task.difficulty]}
+                                </CodingChallengeBadge>
+                            ) : null}
+                            {task ? (
+                                <CodingChallengeBadge>
+                                    {LANGUAGE_LABELS[task.language]}
+                                </CodingChallengeBadge>
+                            ) : null}
+                            <span
+                                className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                                    evaluation.passedLikely
+                                        ? "bg-green-500/20 text-green-300"
+                                        : "bg-yellow-500/20 text-yellow-300"
+                                }`}
+                            >
                                 {evaluation.passedLikely
                                     ? dictionary.coding.likelyMatch
                                     : dictionary.coding.needsWork}
                             </span>
                         </div>
 
-                        <h2 className="text-xl font-semibold text-white">
-                            {task?.name ?? dictionary.coding.feedbackTitle}
-                        </h2>
-                        <p className="max-w-3xl text-sm text-gray-300">
-                            {evaluation.summary}
-                        </p>
+                        <CodingChallengeSectionHeading
+                            title={task?.name ?? dictionary.coding.feedbackTitle}
+                            description={evaluation.summary}
+                        />
                     </div>
 
-                    <div className="min-w-[180px] rounded-xl border border-white/10 bg-gray-950 p-4">
+                    <div className="flex shrink-0 flex-col justify-center border-t border-white/5 bg-white/[0.02] p-6 md:w-[250px] md:border-l md:border-t-0 md:p-8">
                         <div className="flex items-center justify-between gap-3">
                             <p className="text-sm text-gray-400">
                                 {dictionary.coding.overallScore}
@@ -241,18 +263,18 @@ export default function CodingChallengeFeedback() {
                                 {overallTone.label}
                             </span>
                         </div>
-                        <p className="mt-3 text-3xl font-semibold text-white">
+                        <p className="mt-3 text-4xl font-bold tracking-tight text-white">
                             {evaluation.overallScore}%
                         </p>
-                        <div className="mt-3 h-2 rounded-full bg-gray-800">
-                            <div
-                                className={`h-2 rounded-full ${overallTone.bar}`}
-                                style={{ width: `${evaluation.overallScore}%` }}
+                        <div className="mt-4">
+                            <CodingChallengeProgressBar
+                                value={evaluation.overallScore}
+                                className={overallTone.bar}
                             />
                         </div>
                     </div>
                 </div>
-            </section>
+            </CodingChallengeSurface>
 
             <div className="grid gap-4 lg:grid-cols-3">
                 <ScoreCard
@@ -276,9 +298,21 @@ export default function CodingChallengeFeedback() {
             </div>
 
             <div className="grid gap-4 lg:grid-cols-3">
-                <ListCard title={dictionary.coding.strengths} items={evaluation.strengths} />
-                <ListCard title={dictionary.coding.risks} items={evaluation.issues} />
-                <ListCard title={dictionary.coding.improvements} items={evaluation.improvements} />
+                <ListCard
+                    title={dictionary.coding.strengths}
+                    items={evaluation.strengths}
+                    emptyLabel={dictionary.coding.emptyList}
+                />
+                <ListCard
+                    title={dictionary.coding.risks}
+                    items={evaluation.issues}
+                    emptyLabel={dictionary.coding.emptyList}
+                />
+                <ListCard
+                    title={dictionary.coding.improvements}
+                    items={evaluation.improvements}
+                    emptyLabel={dictionary.coding.emptyList}
+                />
             </div>
         </div>
     );

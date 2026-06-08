@@ -8,6 +8,7 @@ import CodingChallengeFeedback from "@/components/coding-challenge/coding-challe
 import CvFeedbackStep from "@/components/cv/CvFeedbackStep";
 import InterviewFeedback from "@/components/interviews/InterviewFeedback";
 import InterviewVoiceStep from "@/components/interviews/InterviewVoiceStep";
+import { LoadingState } from "@/components/ui/LoadingState";
 import { readApiErrorMessage } from "@/lib/api-error";
 import { useI18n } from "@/lib/i18n/context";
 import type { AppDictionary } from "@/lib/i18n/dictionaries";
@@ -1283,7 +1284,13 @@ function InterviewDetailPageContent() {
     }
 
     if (loading) {
-        return <div className="min-h-screen bg-gray-900 text-white" />;
+        return (
+            <div className="min-h-screen bg-gray-900 text-white">
+                <main className="mx-auto max-w-7xl px-4 py-10">
+                    <LoadingState label={labels.loading} />
+                </main>
+            </div>
+        );
     }
 
     if (!interview) {

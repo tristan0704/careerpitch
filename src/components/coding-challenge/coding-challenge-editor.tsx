@@ -10,6 +10,7 @@ import {
 } from "@/components/coding-challenge/coding-challenge-editor-sections";
 import { useCodingChallengeSubmission } from "@/lib/coding-challenge/use-coding-challenge-submission";
 import { useCodingChallengeTask } from "@/lib/coding-challenge/use-coding-challenge-task";
+import { useI18n } from "@/lib/i18n/context";
 import { useInterviewSession } from "@/lib/interview-session/context";
 import type { CodingChallengeRuntimeStatusSnapshot } from "@/lib/coding-challenge/types";
 
@@ -18,6 +19,8 @@ export default function CodingChallengeEditor({
 }: {
   onStatusUpdate?: (status: CodingChallengeRuntimeStatusSnapshot) => void;
 }) {
+  const { dictionary } = useI18n();
+  const labels = dictionary.coding;
   const session = useInterviewSession();
   const interviewId = session.interviewId;
   const roleLabel = session.role;
@@ -93,18 +96,18 @@ export default function CodingChallengeEditor({
 
       {!submitError && isSubmitting ? (
         <CodingChallengeSubmitState
-          message="Lösung wird zur Bewertung eingereicht..."
+          message={labels.submittingForReview}
         />
       ) : null}
 
       {!submitError && !isSubmitting && hasSubmittedCurrentTask ? (
         <CodingChallengeSubmitState
-          message="Lösung eingereicht. Die GPT-Bewertung wurde für den nächsten Schritt gespeichert."
+          message={labels.submitSuccess}
           tone="success"
         />
       ) : null}
 
-      <div className="grid gap-6 xl:grid-cols-[360px_minmax(0,1fr)]">
+      <div className="grid min-h-0 gap-6 xl:grid-cols-[360px_minmax(0,1fr)]">
         <CodingChallengeSidebar task={task} />
         <CodingChallengeWorkspace
           language={task.language}

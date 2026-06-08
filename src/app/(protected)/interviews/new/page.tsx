@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { LoadingState } from "@/components/ui/LoadingState";
 import { useI18n } from "@/lib/i18n/context";
 
 const TOTAL_STEPS = 3;
@@ -213,9 +214,7 @@ export default function NewInterviewPage() {
         return (
             <div className="min-h-screen bg-gray-900 text-white">
                 <main className="mx-auto max-w-7xl px-4 py-10">
-                    <div className="rounded-xl bg-gray-800/50 p-6 outline outline-1 outline-white/10">
-                        {labels.loading}
-                    </div>
+                    <LoadingState label={labels.loading} />
                 </main>
             </div>
         );

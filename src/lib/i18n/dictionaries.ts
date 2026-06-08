@@ -398,20 +398,21 @@ export const dictionaries = {
             loadError: "Interview konnte nicht geladen werden.",
             statusLoadError: "Interview-Status konnte nicht geladen werden.",
             stepSaveError: "Interview-Schritt konnte nicht gespeichert werden.",
+            loading: "Dein Interview wird vorbereitet...",
             lockOpening:
-                "Der Step-Wechsel bleibt gesperrt, während die Voice-Session aufgebaut wird.",
+                "Einen Moment noch: Wir bereiten dein Gespräch vor.",
             lockRunning:
-                "Der Step-Wechsel bleibt gesperrt, solange der Call noch läuft oder beendet wird.",
+                "Bleib bitte noch in diesem Schritt, bis dein Gespräch beendet ist.",
             lockTranscript:
-                "Der Step-Wechsel bleibt gesperrt, während das Transkript verarbeitet wird.",
+                "Wir bereiten dein Transkript vor. Danach kannst du weitergehen.",
             requirementCv:
-                "Schritt 1 braucht zuerst ein gespeichertes CV-Feedback.",
+                "Erstelle zuerst dein CV-Feedback, dann geht es weiter.",
             requirementTranscript:
-                "Schritt 2 braucht zuerst einen beendeten Call mit gestarteter Transkriptverarbeitung.",
+                "Beende zuerst dein Interviewgespräch, damit wir dein Feedback vorbereiten können.",
             requirementInterview:
-                "Schritt 3 braucht zuerst ein fertiges Interview-Feedback.",
+                "Erstelle zuerst dein Interview-Feedback, dann wird der nächste Schritt freigeschaltet.",
             requirementCoding:
-                "Schritt 4 braucht zuerst eine abgegebene und bewertete Coding-Challenge.",
+                "Reiche zuerst deine Coding-Challenge ein, damit wir sie bewerten können.",
             ratingOpen: "Offen",
             ratingGood: "Gut",
             ratingMedium: "Mittel",
@@ -466,9 +467,9 @@ export const dictionaries = {
             pendingDescription:
                 "Beende zuerst das Interview. Anschließend werden Wiedergabe, Timing und die neue GPT-Auswertung angezeigt.",
             transcriptLock:
-                "Der Step-Wechsel bleibt gesperrt, während das Transkript verarbeitet wird.",
+                "Wir bereiten dein Transkript vor. Danach kannst du weitergehen.",
             feedbackLock:
-                "Der Step-Wechsel bleibt gesperrt, während das Interview-Feedback gespeichert und geladen wird.",
+                "Dein Interview-Feedback wird gerade gespeichert. Danach kannst du weitergehen.",
             communication: "Kommunikation",
             answerQuality: "Antwortqualität",
             roleFit: "Rollenfit",
@@ -651,6 +652,21 @@ export const dictionaries = {
             },
             submitFirst:
                 "Reiche zuerst in Schritt 4 eine Coding-Lösung ein, damit hier das persistierte Feedback erscheint.",
+            loadingChallenge: "Coding-Challenge wird vorbereitet...",
+            loadingNewTask: "Neue Aufgabe wird geladen...",
+            newTask: "Neue Aufgabe",
+            resetCode: "Code zurücksetzen",
+            submitSolution: "Lösung einreichen",
+            submittingSolution: "Lösung wird gesendet...",
+            submittingForReview: "Deine Lösung wird zur Bewertung eingereicht...",
+            submitSuccess:
+                "Deine Lösung ist eingereicht. Die Bewertung wurde für den nächsten Schritt gespeichert.",
+            taskSection: "Aufgabe",
+            requirementsSection: "Anforderungen",
+            examplesSection: "Beispiele",
+            evaluationFocusSection: "Bewertungsfokus",
+            editorTitle: "Code-Editor",
+            emptyList: "Keine Einträge vorhanden.",
             likelyMatch: "Wahrscheinlich passend",
             needsWork: "Noch Nacharbeit nötig",
             feedbackTitle: "Coding-Challenge-Feedback",
@@ -1056,20 +1072,21 @@ export const dictionaries = {
             loadError: "Interview could not be loaded.",
             statusLoadError: "Interview status could not be loaded.",
             stepSaveError: "Interview step could not be saved.",
+            loading: "Preparing your interview...",
             lockOpening:
-                "Step navigation stays locked while the voice session is being set up.",
+                "One moment: we are preparing your interview call.",
             lockRunning:
-                "Step navigation stays locked while the call is still running or ending.",
+                "Please stay in this step until your call has finished.",
             lockTranscript:
-                "Step navigation stays locked while the transcript is being processed.",
+                "We are preparing your transcript. You can continue once it is ready.",
             requirementCv:
-                "Step 1 needs saved CV feedback first.",
+                "Create your CV feedback first, then you can continue.",
             requirementTranscript:
-                "Step 2 needs a finished call with transcript processing started first.",
+                "Finish your interview call first so we can prepare your feedback.",
             requirementInterview:
-                "Step 3 needs completed interview feedback first.",
+                "Create your interview feedback first, then the next step unlocks.",
             requirementCoding:
-                "Step 4 needs a submitted and evaluated coding challenge first.",
+                "Submit your coding challenge first so we can evaluate it.",
             ratingOpen: "Open",
             ratingGood: "Good",
             ratingMedium: "Medium",
@@ -1124,9 +1141,9 @@ export const dictionaries = {
             pendingDescription:
                 "Finish the interview first. Afterwards, replay, timing, and the new GPT evaluation will be shown.",
             transcriptLock:
-                "Step navigation stays locked while the transcript is being processed.",
+                "We are preparing your transcript. You can continue once it is ready.",
             feedbackLock:
-                "Step navigation stays locked while interview feedback is being saved and loaded.",
+                "Your interview feedback is being saved. You can continue once it is ready.",
             communication: "Communication",
             answerQuality: "Answer quality",
             roleFit: "Role fit",
@@ -1309,6 +1326,21 @@ export const dictionaries = {
             },
             submitFirst:
                 "Submit a coding solution in step 4 first so the persisted feedback can appear here.",
+            loadingChallenge: "Preparing coding challenge...",
+            loadingNewTask: "Loading new task...",
+            newTask: "New task",
+            resetCode: "Reset code",
+            submitSolution: "Submit solution",
+            submittingSolution: "Submitting solution...",
+            submittingForReview: "Submitting your solution for evaluation...",
+            submitSuccess:
+                "Your solution has been submitted. The evaluation was saved for the next step.",
+            taskSection: "Task",
+            requirementsSection: "Requirements",
+            examplesSection: "Examples",
+            evaluationFocusSection: "Evaluation focus",
+            editorTitle: "Code editor",
+            emptyList: "No entries yet.",
             likelyMatch: "Likely match",
             needsWork: "Needs more work",
             feedbackTitle: "Coding challenge feedback",

@@ -2,6 +2,7 @@
 
 import { useState, type ChangeEvent } from "react";
 
+import { LoadingState } from "@/components/ui/LoadingState";
 import { useI18n } from "@/lib/i18n/context";
 
 const PROFILE_CV_MAX_FILE_BYTES = 20_000_000;
@@ -317,9 +318,7 @@ export default function ProfilePageContent({
                     </div>
 
                     {loadingProfile ? (
-                        <div className="rounded-lg bg-gray-900 px-4 py-3 text-sm text-gray-400 outline outline-1 outline-white/10">
-                            {labels.loading}
-                        </div>
+                        <LoadingState label={labels.loading} compact />
                     ) : null}
 
                     <div className="rounded-lg bg-gray-900 px-4 py-3 outline outline-1 outline-white/10">
